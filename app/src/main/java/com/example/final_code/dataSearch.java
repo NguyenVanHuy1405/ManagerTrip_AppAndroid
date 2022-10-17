@@ -52,7 +52,17 @@ public class dataSearch {
         this.date = date;
         this.risks = risks;
         this.description = description;
+    }
 
+    public dataSearch(String id, String name, String destination, String date, String risks){
+        this.id = id;
+        this.name = name;
+        this.destination = destination;
+        this.date = date;
+        this.risks = risks;
+    }
+
+    public dataSearch(){
 
     }
 

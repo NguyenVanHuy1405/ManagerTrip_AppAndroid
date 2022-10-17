@@ -1,100 +1,76 @@
 package com.example.final_code;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHolder> implements Filterable {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.HomeViewHolder> {
+    private List<dataSearch> list;
     private Context context;
-    private List<dataSearch> dataSearches= new ArrayList<>();
-    private List<dataSearch> dataSearchList = new ArrayList<>();
-
-    SearchAdapter(Context context, ArrayList<dataSearch> dataSearches){
-        this.context=context;
-        this.dataSearches = dataSearches;
-        this.dataSearchList = new ArrayList<>();
+    public SearchAdapter(Context context){
+        list = new ArrayList<>();
+        this.context = context;
     }
-    @Override
-    public Filter getFilter() {
-        return null;
+
+    public void setList(List<dataSearch>list){
+        this.list = list;
+        notifyDataSetChanged();
     }
-    Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence charSequence) {
-            List<dataSearch> dataSearches = new ArrayList<>();
 
-            if(charSequence.toString().isEmpty()){
-                dataSearches.addAll(dataSearchList);
-            }else{
-                for(dataSearch data : dataSearchList){
-                    if(data.getName().toLowerCase().contains(charSequence.toString().toLowerCase())){
-                        dataSearches.add(data);
-                    }
-                }
-            }
-            FilterResults filterResults = new FilterResults();
-            filterResults.values = dataSearches;
-            return filterResults;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            dataSearches.clear();
-            dataSearches.addAll((Collection<? extends dataSearch>) filterResults.values);
-            notifyDataSetChanged();
-        }
-    };
-
+    public dataSearch getItem(int position){
+        return list.get(position);
+    }
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.manager_trip, parent, false);
-        return new MyViewHolder(view);
+        View view = inflater.inflate(R.layout.manager_trip, parent,false);
+        return new SearchAdapter.HomeViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        dataSearch list = dataSearches.get(position);
-        holder.id_txt.setText(String.valueOf(list.getId()));
-        holder.out_name.setText(String.valueOf(list.getName()));
-        holder.out_destination.setText(String.valueOf(list.getDestination()));
-        holder.out_date.setText(String.valueOf(list.getDate()));
-        if(list.getRisks().equals("1")){
-            holder.out_risk.setText("Require Assessment:YES");
+    public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
+        dataSearch item = list.get(position);
+        holder.id.setText(item.getId());
+        holder.name.setText(item.getName());
+        holder.destination.setText(item.getDestination());
+        holder.date.setText(item.getDate());
+//        holder.risk.setText(item.getRisks());
+        if(item.getRisks().equals("1")){
+            holder.risk.setText("Require Assessment:YES");
         }
-        else if(list.getRisks().equals("0")){
-            holder.out_risk.setText("Require Assessment:NO");
+        else if(item.getRisks().equals("0")){
+            holder.risk.setText("Require Assessment:NO");
         }
+//        holder.description.setText(item.getDescription());
     }
 
     @Override
     public int getItemCount() {
-        return dataSearches.size();
+        return list.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView id_txt, out_name, out_destination, out_date, out_risk;
-        public MyViewHolder(@NonNull View itemView) {
-            super(itemView);
-            id_txt = itemView.findViewById(R.id.id_txt);
-            out_name = itemView.findViewById(R.id.out_name);
-            out_destination = itemView.findViewById(R.id.out_destination);
-            out_date = itemView.findViewById(R.id.out_date);
-            out_risk = itemView.findViewById(R.id.out_risk);
+    public class HomeViewHolder extends RecyclerView.ViewHolder{
+        private TextView id, name, destination, date, risk, description;
+        public HomeViewHolder(@NonNull View view) {
+            super(view);
+            id = view.findViewById(R.id.id_txt);
+            name = view.findViewById(R.id.out_name);
+            destination = view.findViewById(R.id.out_date);
+            date = view.findViewById(R.id.out_destination);
+            risk = view.findViewById(R.id.out_risk);
         }
+
+
     }
 }

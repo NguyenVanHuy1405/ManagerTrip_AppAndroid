@@ -10,9 +10,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Database extends SQLiteOpenHelper {
 
 
+    private dataSearch item;
     private Context context;
     private SQLiteDatabase database;
     private static final String DATABASE_NAME ="Trip.db";
@@ -162,5 +166,61 @@ public class Database extends SQLiteOpenHelper {
     void deleteAll(){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM "+ TABLE_NAME);
+    }
+
+    //Search by key word
+    public List<dataSearch> searchByKey(String key){
+        List<dataSearch> list = new ArrayList<>();
+        String whereClause = "name like ?";
+        String[] whereArgs = {"%"+key+"%"};
+        SQLiteDatabase st = getReadableDatabase();
+        Cursor rs = st.query(TABLE_NAME, null, whereClause, whereArgs, null,null,null);
+        while (rs != null && rs.moveToNext()){
+            String id = rs.getString(0);
+            String name= rs.getString(1);
+            String destination= rs.getString(2);
+            String risk= rs.getString(3);
+            String description= rs.getString(4);
+            String date = rs.getString(5);
+            list.add(new dataSearch(id,name, destination,date, risk, description));
+        }
+        return list;
+    }
+
+    //Search by date
+    public List<dataSearch> searchByDate(String from, String to){
+        List<dataSearch> list = new ArrayList<>();
+        String whereClause = "date BETWEEN ? AND ?";
+        String[] whereArgs = {from.trim(), to.trim()};
+        SQLiteDatabase st = getReadableDatabase();
+        Cursor rs = st.query("items", null, whereClause, whereArgs, null,null,null);
+        while (rs != null && rs.moveToNext()){
+            String id = rs.getString(0);
+            String name= rs.getString(1);
+            String destination= rs.getString(2);
+            String risk= rs.getString(3);
+            String description= rs.getString(4);
+            String date = rs.getString(5);
+            list.add(new dataSearch(id, name, destination, date, risk, description));
+        }
+        return list;
+    }
+    public List<dataSearch> getAll(){
+        List<dataSearch> list = new ArrayList<>();
+        SQLiteDatabase st = getReadableDatabase();
+        String order= "date ASC";
+        Cursor rs = st.query(TABLE_NAME, null, null,
+                null, null,null, order);
+        while(rs != null && rs.moveToNext()){
+            String id = rs.getString(0);
+            String name= rs.getString(1);
+            String destination= rs.getString(2);
+            String date= rs.getString(3);
+            String risk= rs.getString(4);
+            String description= rs.getString(5);
+            //add to
+            list.add(new dataSearch(id, name, destination,date, risk));
+        }
+        return list;
     }
 }

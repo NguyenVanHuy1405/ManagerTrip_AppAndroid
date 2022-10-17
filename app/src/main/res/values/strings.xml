@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Final_code</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name">Name</string>
+    <string name="destination">Destination</string>
+    <string name="dateOfTrip">Date of the trip</string>
+    <string name="require_risk">Require risks assessment</string>
+    <string name="description">Description</string>
+    <string name="add">Add new trip</string>
+    <string name="amount">Amount</string>
+    <string name="add_expense">Add expenses</string>
+</resources>
